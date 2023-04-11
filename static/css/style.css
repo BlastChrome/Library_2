@@ -1,0 +1,14 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#title.error,#author.error,#pages.error,#read.error{
+    border: 1px solid red;
+    background-color: #ffcccc;
+}
+#title.success,#author.success,#pages.success,#read.success{
+    border: 1px solid green;
+    background-color: #ccffcc;
+}
