@@ -68,7 +68,7 @@ Book.prototype.addBookToDisplay = function () {
     bookHTML.classList.add('fade-in');
     setTimeout(() => {
         bookHTML.classList.add('visible');
-    }, 10);
+    }, 100);
 
 
     // Clears the form
@@ -127,7 +127,7 @@ libraryDisplay.addEventListener('click', (e) => {
     // if the delete button is clicked then delete the book from the library and the display
     if (e.target.classList.contains('btn-danger')) { 
         // bookhtml 
-        
+        let bookHTML = e.target.parentElement.parentElement;
         // get the book id
         let bookID = e.target.parentElement.parentElement.getAttribute('data-id'); 
         // find the index of the book in the library
@@ -135,27 +135,30 @@ libraryDisplay.addEventListener('click', (e) => {
         // remove book from library
         myLibrary.splice(bookIndex, 1);
 
-        bookHTML.classList.add('fade-out'); // Add the fade-out class
-
+        bookHTML.classList.remove('visible'); // Remove the visible class
+        bookHTML.classList.remove('fade-in');
         // Remove the book from the display after the animation is completed
+        bookHTML.classList.add('fade-out-collapse'); // Add the fade-out class 
         setTimeout(() => {
-            bookHTML.remove();
+            bookHTML.remove(); // Remove the book from the display
+            // Update the library array
+            myLibrary = myLibrary.filter((book) => book.id !== parseInt(bookID));
         }, 500); // The duration should match the transition duration in the CSS
     }   
     // otherwise display the edit form modal, and allow the user to edit the book
     else if (e.target.classList.contains('btn-secondary')) {  
         // get the book id
          currentBookID = e.target.parentElement.parentElement.getAttribute('data-id');
-         console.log(currentBookID);
         // find the index of the book in the library
         let bookIndex = myLibrary.findIndex((book) => book.id === parseInt(currentBookID)); 
-        console.log(bookIndex);
         // get the book object
         let book = myLibrary[bookIndex];
         // add the book values to the edit form
         editTitle.value = book.title;
         editAuthor.value = book.author;
-        editPages.value = book.pages; 
+        editPages.value = book.pages;   
+        // ternary operator to set the read value 
+        book.read === 'Yes' ? editRead.selectedIndex = 0 : editRead.selectedIndex = 1;
     }
 })
 
@@ -167,21 +170,23 @@ orderSelect.addEventListener('click', (e) => {
 
 // Move the editSubmit event listener outside the libraryDisplay event listener
 
-
 editSubmit.addEventListener('click', () => {
     if (currentBookID !== undefined) {
         let bookHTML = libraryDisplay.querySelector(`tr[data-id='${currentBookID}']`);
         let currentBookIndex = myLibrary.findIndex((book) => book.id === parseInt(currentBookID));
-        console.log(bookHTML);
         bookHTML.children[0].textContent = editTitle.value;
         bookHTML.children[1].textContent = editAuthor.value;
-        bookHTML.children[2].textContent = editPages.value;
+        bookHTML.children[2].textContent = editPages.value; 
+        // ternary operator to set the read value 
+        editRead.selectedIndex === 0 ? bookHTML.children[3].textContent = 'Yes' : bookHTML.children[3].textContent = 'No';
+
 
         myLibrary[currentBookIndex].title = editTitle.value;
         myLibrary[currentBookIndex].author = editAuthor.value;
         myLibrary[currentBookIndex].pages = editPages.value;
+        // ternary operator to set the read value
+        editRead.selectedIndex === 0 ? myLibrary[currentBookIndex].read = 'Yes' : myLibrary[currentBookIndex].read = 'No';
 
-        console.log(myLibrary);
     }
 });
 

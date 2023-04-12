@@ -14,11 +14,6 @@
 }
 
 
-.fade-out {
-    opacity: 0;
-    transition: all 0.5s ease-out;
-    transform: translateY(100px);
-  }
 
   .fade-in {
     opacity: 0;
@@ -29,5 +24,25 @@
     opacity: 1;
     transition: all 0.5s ease-in;
     transform: translateY(0);
+  }
+
+
+  @keyframes fade-out-collapse {
+    0% {
+      opacity: 1;
+      max-height: 100px;
+    }
+    50% {
+      opacity: 0;
+      max-height: 100px;
+    }
+    100% {
+      opacity: 0;
+      max-height: 0;
+    }
+  }
+  
+  .fade-out-collapse {
+    animation: fade-out-collapse 0.5s forwards;
   }
   
