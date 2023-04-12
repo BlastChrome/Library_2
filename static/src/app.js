@@ -13,6 +13,12 @@ let editPages = document.getElementById('edit-pages');
 let editRead = document.getElementById('edit-read');
 let editSubmit = document.getElementById('edit-submit');
 
+
+let searchbar = document.getElementById('searchbar');
+
+console.log(searchbar);
+
+
 const libraryDisplay = document.getElementById('library-display'); 
 const orderSelect = document.getElementById('order-select');  
 const titleOrder = document.getElementById('order-title');
@@ -91,7 +97,14 @@ let myLibrary = [book1, book2, book3, book4];
 
 
 
-/* Event listeners */
+/* Event listeners */ 
+
+
+// Event listener for the search bar
+searchbar.addEventListener('keyup', (e) => {
+    // update the library display with the search results
+    updateLibraryDisplay(myLibrary, e.target.value);
+});
 
 // Submit new book
 submit.addEventListener('click', (e) => {
@@ -165,7 +178,28 @@ libraryDisplay.addEventListener('click', (e) => {
 
 // change library order based on the select value(title, author, pages)
 orderSelect.addEventListener('click', (e) => {
-    let order = e.target.getAttribute('value');
+    // get the data-value of the selected option
+    let order = e.target.getAttribute('data-value');
+    console.log(order); 
+    // sort the library array based on the order value
+    myLibrary.sort((a, b) => {
+        if (a[order] < b[order]) {
+            return -1;
+        }
+        else if (a[order] > b[order]) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }) 
+    // clear the library display
+    libraryDisplay.innerHTML = '';
+    // add the books to the display
+    myLibrary.forEach((book) => {
+        book.addBookToDisplay();
+    }
+    )
 });
 
 // Move the editSubmit event listener outside the libraryDisplay event listener
@@ -186,9 +220,10 @@ editSubmit.addEventListener('click', () => {
         myLibrary[currentBookIndex].pages = editPages.value;
         // ternary operator to set the read value
         editRead.selectedIndex === 0 ? myLibrary[currentBookIndex].read = 'Yes' : myLibrary[currentBookIndex].read = 'No';
-
     }
 });
+
+
 
 
 // onload add the starting books to the display
@@ -205,6 +240,40 @@ function generateID() {
 
 
 
+function updateLibraryDisplay(library, search) { 
+    // clear the library display
+    libraryDisplay.innerHTML = '';
 
+    // if the search value is empty then add all the books to the display
+    if (search === '') {
+        library.forEach((book) => {
+            book.addBookToDisplay();
+        })
+        return;
+    }  
+    // if a string is entered in the search bar then filter the library based on the title or author
+    if (isNaN(search)) {
+        let filteredLibrary = library.filter((book) => book.title.toLowerCase().includes(search.toLowerCase()) || book.author.toLowerCase().includes(search.toLowerCase()));
+        // add the books to the display
+        filteredLibrary.forEach((book) => {
+            book.addBookToDisplay();
+            console.log("string");
+        }
+        )
+        return;
+    } 
+
+    // if a number is entered in the search bar then filter the library based on the pages - the pages are strings
+    if (!isNaN(search)) {
+        let filteredLibrary = library.filter((book) => book.pages.includes(search));
+        // add the books to the display
+        filteredLibrary.forEach((book) => {
+            book.addBookToDisplay();
+            console.log("number");
+        }
+        )
+        return;
+    }
+}
 
 
