@@ -12,3 +12,22 @@
     border: 1px solid green;
     background-color: #ccffcc;
 }
+
+
+.fade-out {
+    opacity: 0;
+    transition: all 0.5s ease-out;
+    transform: translateY(100px);
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  
+  .fade-in.visible {
+    opacity: 1;
+    transition: all 0.5s ease-in;
+    transform: translateY(0);
+  }
+  

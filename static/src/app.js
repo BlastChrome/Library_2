@@ -1,8 +1,6 @@
 
 // Global variables
 
-
-
 let title = document.getElementById('title');
 let author = document.getElementById('author');
 let pages = document.getElementById('pages');
@@ -28,6 +26,9 @@ let totalPages = 0;
 let totalBooks = 0; 
 let totalRead = 0; 
 let totalUnread = 0;
+
+// global variable for current book to be edited 
+let currentBookID = null;
 
 // Obect constructor function for Book
 
@@ -63,9 +64,16 @@ Book.prototype.addBookToDisplay = function () {
                                        
                                     </td>`;
     libraryDisplay.appendChild(bookHTML); 
+    // Add the fade-in effect
+    bookHTML.classList.add('fade-in');
+    setTimeout(() => {
+        bookHTML.classList.add('visible');
+    }, 10);
+
 
     // Clears the form
     [title, author, pages].forEach((input) => {input.value = '';})
+
 }
 
 
@@ -114,62 +122,68 @@ submit.addEventListener('click', (e) => {
     
 }); 
 
-// Event delegation for the delete and edit buttons
+// Event delegation for the delete and update buttons
 libraryDisplay.addEventListener('click', (e) => {
     // if the delete button is clicked then delete the book from the library and the display
     if (e.target.classList.contains('btn-danger')) { 
-        // get the book html object 
-        let bookHTML = e.target.parentElement.parentElement;
+        // bookhtml 
+        
         // get the book id
         let bookID = e.target.parentElement.parentElement.getAttribute('data-id'); 
         // find the index of the book in the library
         let bookIndex = myLibrary.findIndex((book) => book.id === parseInt(bookID)); 
         // remove book from library
         myLibrary.splice(bookIndex, 1);
-        // remove book from display
-        e.target.parentElement.parentElement.remove();
 
+        bookHTML.classList.add('fade-out'); // Add the fade-out class
+
+        // Remove the book from the display after the animation is completed
+        setTimeout(() => {
+            bookHTML.remove();
+        }, 500); // The duration should match the transition duration in the CSS
     }   
     // otherwise display the edit form modal, and allow the user to edit the book
     else if (e.target.classList.contains('btn-secondary')) {  
         // get the book id
-        let bookID = e.target.parentElement.parentElement.getAttribute('data-id'); 
+         currentBookID = e.target.parentElement.parentElement.getAttribute('data-id');
+         console.log(currentBookID);
         // find the index of the book in the library
-        let bookIndex = myLibrary.findIndex((book) => book.id === parseInt(bookID)); 
+        let bookIndex = myLibrary.findIndex((book) => book.id === parseInt(currentBookID)); 
+        console.log(bookIndex);
         // get the book object
         let book = myLibrary[bookIndex];
         // add the book values to the edit form
         editTitle.value = book.title;
         editAuthor.value = book.author;
-        editPages.value = book.pages;
-
-        // edit the book
-        editSubmit.addEventListener('click', (e) => {
-            e.preventDefault();
-            // update the book object 
-            book.title = editTitle.value;
-            book.author = editAuthor.value;
-            book.pages = editPages.value;
-            book.read = editRead.value; 
-
-            // find the book in the display and update the values  
-
-
-            console.log(book.title);
-
-
-            // close the modal
-            // $('#editModal').modal('hide');
-
-        })  
+        editPages.value = book.pages; 
     }
 })
+
 
 // change library order based on the select value(title, author, pages)
 orderSelect.addEventListener('click', (e) => {
     let order = e.target.getAttribute('value');
 });
 
+// Move the editSubmit event listener outside the libraryDisplay event listener
+
+
+editSubmit.addEventListener('click', () => {
+    if (currentBookID !== undefined) {
+        let bookHTML = libraryDisplay.querySelector(`tr[data-id='${currentBookID}']`);
+        let currentBookIndex = myLibrary.findIndex((book) => book.id === parseInt(currentBookID));
+        console.log(bookHTML);
+        bookHTML.children[0].textContent = editTitle.value;
+        bookHTML.children[1].textContent = editAuthor.value;
+        bookHTML.children[2].textContent = editPages.value;
+
+        myLibrary[currentBookIndex].title = editTitle.value;
+        myLibrary[currentBookIndex].author = editAuthor.value;
+        myLibrary[currentBookIndex].pages = editPages.value;
+
+        console.log(myLibrary);
+    }
+});
 
 
 // onload add the starting books to the display
@@ -183,3 +197,9 @@ window.onload = function () {
 function generateID() {
     return Math.floor(Math.random() * 100000000);
 }
+
+
+
+
+
+
