@@ -4,8 +4,8 @@ Features:
 @REM DONE: User should be able to delete a book from the library
 @REM DONE: User should be able to change a book's read status
 @REM DONE: Library should have css animations for adding and deleting books
-TODO: User should be able to search for a book by title or author 
-TODO: User should be able to sort the books by title, author, number of pages, or whether or not they have read it
+@REM DONE: User should be able to search for a book by title or author 
+@REM DONE: User should be able to sort the books by title, author, number of pages, or whether or not they have read it
 TODO: User should be able to see the total number of pages they have read
 TODO: User should be able to see the total number of pages they have left to read
 TODO: User should be able to see the total number of books they have read
