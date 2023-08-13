@@ -146,8 +146,4 @@ function deleteBook(id) {
             lib.render();
         }
     }
-
-
 }
-
-
