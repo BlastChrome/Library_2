@@ -1,48 +1,73 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-#title.error,#author.error,#pages.error,#read.error{
-    border: 1px solid red;
-    background-color: #ffcccc;
+#title.error,
+#author.error,
+#pages.error,
+#read.error,
+#edit-title.error,
+#edit-author.error,
+#edit-pages.error,
+#edit-read.error {
+  border: 1px solid red;
+  background-color: #ffcccc;
 }
-#title.success,#author.success,#pages.success,#read.success{
-    border: 1px solid green;
-    background-color: #ccffcc;
+
+#title.success,
+#edit-title.success,
+#author.success,
+#edit-author.success,
+#pages.success,
+#edit-pages.success,
+#read.success,
+#edit-read.success {
+  border: 1px solid green;
+  background-color: #ccffcc;
 }
 
 
 
-  .fade-in {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  
-  .fade-in.visible {
+.fade-in {
+  opacity: 0;
+  transform: translateY(100px);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transition: all 0.5s ease-in;
+  transform: translateY(0);
+}
+
+
+@keyframes fade-out-collapse {
+  0% {
     opacity: 1;
-    transition: all 0.5s ease-in;
-    transform: translateY(0);
+    max-height: 100px;
   }
 
+  50% {
+    opacity: 0;
+    max-height: 100px;
+  }
 
-  @keyframes fade-out-collapse {
-    0% {
-      opacity: 1;
-      max-height: 100px;
-    }
-    50% {
-      opacity: 0;
-      max-height: 100px;
-    }
-    100% {
-      opacity: 0;
-      max-height: 0;
-    }
+  100% {
+    opacity: 0;
+    max-height: 0;
   }
-  
-  .fade-out-collapse {
-    animation: fade-out-collapse 0.5s forwards;
+}
+
+.fade-out-collapse {
+  animation: fade-out-collapse 0.5s forwards;
+}
+
+@media (max-width: 767px) {
+  .button-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
   }
-  
+}

@@ -20,7 +20,15 @@ const pagesForm = document.getElementById("pages");
 const readSelect = document.getElementById("read");
 const submitBtn = document.getElementById("submit");
 
+//edit modal DOM Elements 
+const editTitle = document.getElementById("edit-title");
+const editAuthor = document.getElementById("edit-author");
+const editPages = document.getElementById("edit-pages");
+const editRead = document.getElementById("edit-read");
+const editSubmit = document.getElementById("edit-submit");
 
+const modalTitle = document.querySelector(".modal-title");
+const modalBody = document.querySelector(".modal-body");
 //event listeners 
 submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
@@ -35,9 +43,13 @@ submitBtn.addEventListener('click', function (e) {
     }
     lib.addErrorClass();
     console.log(lib.getInfo())
-
 })
-
+editSubmit.addEventListener('click', function (e) {
+    e.preventDefault();
+    let book = lib.findBookById(modalBody.getAttribute('id'));
+    book.edit(editTitle.value, editAuthor.value, editPages.value, editRead.value);
+    lib.render();
+})
 // Class Methods
 Book.prototype.updateBook = function () { }
 Book.prototype.createBookElement = function () {
@@ -49,23 +61,23 @@ Book.prototype.createBookElement = function () {
     <td>${this.author}</td>
     <td>${this.pages}</td>
     <td>${this.hasRead == true ? 'Yes' : 'No'}</td>
-    <td>
-        <button class='btn btn-primary'onclick="editBook(${this.id})">Edit</button>
+    <td class="button-box">
+        <button data-toggle="modal" data-target="#editModal" class='btn btn-primary'onclick="fillEditForm(${this.id})">Edit</button>
          <button class='btn btn-danger'onclick="deleteBook(${this.id})">Delete</button>
     </td>
     `
     return bookEl;
 }
-Book.prototype.getInfo = function () { }
 Book.prototype.createID = function () {
     // Generate a random number between 100 and 999 (inclusive)
     const id = Math.floor(Math.random() * (999 - 100 + 1)) + 100;
     return id;
 }
-Book.prototype.editBook = function (id) {
-}
-Book.prototype.deleteBook = function (id) {
-    console.log("clicked");
+Book.prototype.edit = function (title, author, pages, hasRead) {
+    this.title = title
+    this.author = author
+    this.pages = pages
+    this.hasRead = hasRead
 }
 
 Library.prototype.addBookToArr = function (book) {
@@ -134,9 +146,14 @@ lib.addBookToArr(book4);
 lib.render()
 
 //public functions
-function editBook(id) {
+function fillEditForm(id) {
+    modalTitle.innerHTML = 'Edit Book: ';
     let book = lib.findBookById(id);
-    console.log(book);
+    editTitle.value = book.title;
+    editAuthor.value = book.author;
+    editPages.value = book.pages;
+    modalTitle.innerHTML += book.title;
+    modalBody.setAttribute('id', book.id);
 }
 function deleteBook(id) {
     for (let i = 0; i < lib.libArr.length; i++) {
