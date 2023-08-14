@@ -34,6 +34,8 @@ submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
     e.preventDefault();
     if (titleForm.value == '' || authorForm.value == '' || pagesForm.value == '') {
+        lib.addErrorClass('new-book');
+        return;
     } else if (lib.hasBook(titleForm.value)) {
         return;
     } else {
@@ -41,16 +43,24 @@ submitBtn.addEventListener('click', function (e) {
         lib.addBookToArr(book);
         lib.render()
     }
-    lib.addErrorClass();
-    console.log(lib.getInfo())
+    lib.addErrorClass('new-book');
 })
 editSubmit.addEventListener('click', function (e) {
     e.preventDefault();
-    let book = lib.findBookById(modalBody.getAttribute('id'));
-    book.edit(editTitle.value, editAuthor.value, editPages.value, editRead.value);
-    lib.render();
+    if (editTitle.value == '' || editAuthor.value == '' || editPages.value == '') {
+        lib.addErrorClass('edit-book');
+        return;
+    } else if (lib.hasBook(editTitle.value)) {
+        return;
+    } else {
+        let book = lib.findBookById(modalBody.getAttribute('id'));
+        book.edit(editTitle.value, editAuthor.value, editPages.value, editRead.value);
+        lib.render()
+    }
+    lib.addErrorClass('edit-book');
 })
-// Class Methods
+
+// Class Method
 Book.prototype.updateBook = function () { }
 Book.prototype.createBookElement = function () {
     let bookEl = document.createElement('tr');
@@ -62,7 +72,7 @@ Book.prototype.createBookElement = function () {
     <td>${this.pages}</td>
     <td>${this.hasRead == true ? 'Yes' : 'No'}</td>
     <td class="button-box">
-        <button data-toggle="modal" data-target="#editModal" class='btn btn-primary'onclick="fillEditForm(${this.id})">Edit</button>
+        <button data-toggle="modal" data-target="#editModal" class='btn btn-primary'onclick="initEditForm(${this.id})">Edit</button>
          <button class='btn btn-danger'onclick="deleteBook(${this.id})">Delete</button>
     </td>
     `
@@ -106,8 +116,13 @@ Library.prototype.addBookToDisplay = function (book) {
     //adds the el as a child node to the lib display
     this.libDisplay.appendChild(el);
 }
-Library.prototype.addErrorClass = function () {
-    let forms = [titleForm, authorForm, pagesForm];
+Library.prototype.addErrorClass = function (form) {
+    let forms = [];
+    if (form == 'new-book') {
+        forms = [titleForm, authorForm, pagesForm];
+    } else if (form == 'edit-book') {
+        forms = [editTitle, editAuthor, editPages];
+    }
     for (let i = 0; i < forms.length; i++) {
         if (forms[i].value == '') {
             forms[i].classList.add('error');
@@ -146,20 +161,21 @@ lib.addBookToArr(book4);
 lib.render()
 
 //public functions
-function fillEditForm(id) {
+function initEditForm(id) {
     modalTitle.innerHTML = 'Edit Book: ';
     let book = lib.findBookById(id);
+    // sets the forms default values to that of the book of the same id 
     editTitle.value = book.title;
     editAuthor.value = book.author;
     editPages.value = book.pages;
     modalTitle.innerHTML += book.title;
+    //gives the modal body the same id as the book
     modalBody.setAttribute('id', book.id);
 }
 function deleteBook(id) {
     for (let i = 0; i < lib.libArr.length; i++) {
         if (lib.libArr[i].id == id) {
             lib.libArr.splice(i, 1);
-            console.log(lib.libArr);
             lib.render();
         }
     }
