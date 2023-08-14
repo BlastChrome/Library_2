@@ -29,6 +29,10 @@ const editSubmit = document.getElementById("edit-submit");
 
 const modalTitle = document.querySelector(".modal-title");
 const modalBody = document.querySelector(".modal-body");
+
+
+const orderSelect = document.getElementById("order-select");
+
 //event listeners 
 submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
@@ -59,6 +63,16 @@ editSubmit.addEventListener('click', function (e) {
     }
     lib.addErrorClass('edit-book');
 })
+orderSelect.addEventListener("click", function (e) {
+    if (e.target.id == 'order-title') {
+        lib.sortLibraryByTitle();
+    } else if (e.target.id == 'order-author') {
+        lib.sortLibraryByAuthor();
+    } else {
+        lib.sortLibraryByPages();
+    }
+})
+
 
 // Class Method
 Book.prototype.updateBook = function () { }
@@ -152,21 +166,41 @@ Library.prototype.render = function () {
 Library.prototype.findBookById = function (id) {
     return this.libArr.find(book => book.id == id);
 }
+Library.prototype.sortLibraryByTitle = function () {
+    this.libArr.sort(compareTitles);
+    this.render();
+}
+Library.prototype.sortLibraryByAuthor = function () {
+    this.libArr.sort(compareAuthor);
+    this.render();
+}
+Library.prototype.sortLibraryByPages = function () {
+    this.libArr.sort(comparePages);
+    this.render();
 
+}
+function compareTitles(a, b) {
+    return (a.title < b.title) ? -1 : (a.title > b.title) ? 1 : 0;
+}
+function compareAuthor(a, b) {
+    return (a.author < b.author) ? -1 : (a.author > b.author) ? 1 : 0;
+}
+function comparePages(a, b) {
+    return (a.pages < b.pages) ? -1 : (a.pages > b.pages) ? 1 : 0;
+}
 // Instantition of Library
 let lib = new Library();
 
 //test values 
-// let book1 = new Book("Hunter x Hunter", "Yoshihiro Togashi", 400, true);
-// let book2 = new Book("Jujustu Kaisen", "Gege Akutami", 200, true);
-// let book3 = new Book("One Piece", "Eiichiro Oda", 1000, true);
-// let book4 = new Book("Berserk", "Kentaro Miura", 500, true);
-// lib.addBookToArr(book1);
-// lib.addBookToArr(book2);
-// lib.addBookToArr(book3);
-// lib.addBookToArr(book4);
-// lib.render()
-
+let book1 = new Book("Hunter x Hunter", "Yoshihiro Togashi", 400, true);
+let book2 = new Book("Jujustu Kaisen", "Gege Akutami", 200, true);
+let book3 = new Book("One Piece", "Eiichiro Oda", 1000, true);
+let book4 = new Book("Berserk", "Kentaro Miura", 500, true);
+lib.addBookToArr(book1);
+lib.addBookToArr(book2);
+lib.addBookToArr(book3);
+lib.addBookToArr(book4);
+lib.render();
 //public functions
 function initEditForm(id) {
     modalTitle.innerHTML = 'Edit Book: ';
