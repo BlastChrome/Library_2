@@ -62,6 +62,7 @@ editSubmit.addEventListener('click', function (e) {
 
 // Class Method
 Book.prototype.updateBook = function () { }
+
 Book.prototype.createBookElement = function () {
     let bookEl = document.createElement('tr');
     bookEl.setAttribute('id', this.id);
@@ -78,11 +79,13 @@ Book.prototype.createBookElement = function () {
     `
     return bookEl;
 }
+
 Book.prototype.createID = function () {
     // Generate a random number between 100 and 999 (inclusive)
     const id = Math.floor(Math.random() * (999 - 100 + 1)) + 100;
     return id;
 }
+
 Book.prototype.edit = function (title, author, pages, hasRead) {
     this.title = title
     this.author = author
@@ -100,6 +103,7 @@ Library.prototype.addBookToArr = function (book) {
     }
 }
 Library.prototype.removeBookFromLibrary = function (book) { }
+
 Library.prototype.hasBook = function (title) {
     // if the lib arr has the title of the book, return true 
     for (let i = 0; i < this.libArr.length; i++) {
@@ -107,15 +111,18 @@ Library.prototype.hasBook = function (title) {
     }
     return false;
 }
+
 Library.prototype.getInfo = function () {
     return this;
 }
+
 Library.prototype.addBookToDisplay = function (book) {
     //creates the book html
     let el = book.createBookElement()
     //adds the el as a child node to the lib display
     this.libDisplay.appendChild(el);
 }
+
 Library.prototype.addErrorClass = function (form) {
     let forms = [];
     if (form == 'new-book') {
@@ -132,8 +139,8 @@ Library.prototype.addErrorClass = function (form) {
             forms[i].classList.remove('error');
         }
     }
-
 }
+
 Library.prototype.render = function () {
     //clear the current library element 
     while (this.libDisplay.firstChild) this.libDisplay.removeChild(this.libDisplay.lastChild);
@@ -150,15 +157,15 @@ Library.prototype.findBookById = function (id) {
 let lib = new Library();
 
 //test values 
-let book1 = new Book("Hunter x Hunter", "Yoshihiro Togashi", 400, true);
-let book2 = new Book("Jujustu Kaisen", "Gege Akutami", 200, true);
-let book3 = new Book("One Piece", "Eiichiro Oda", 1000, true);
-let book4 = new Book("Berserk", "Kentaro Miura", 500, true);
-lib.addBookToArr(book1);
-lib.addBookToArr(book2);
-lib.addBookToArr(book3);
-lib.addBookToArr(book4);
-lib.render()
+// let book1 = new Book("Hunter x Hunter", "Yoshihiro Togashi", 400, true);
+// let book2 = new Book("Jujustu Kaisen", "Gege Akutami", 200, true);
+// let book3 = new Book("One Piece", "Eiichiro Oda", 1000, true);
+// let book4 = new Book("Berserk", "Kentaro Miura", 500, true);
+// lib.addBookToArr(book1);
+// lib.addBookToArr(book2);
+// lib.addBookToArr(book3);
+// lib.addBookToArr(book4);
+// lib.render()
 
 //public functions
 function initEditForm(id) {
