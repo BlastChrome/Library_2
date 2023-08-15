@@ -152,6 +152,14 @@ Library.prototype.addErrorClass = function (form) {
             forms[i].classList.remove('error');
         }
     }
+    //after 2 seconds remove error/success class;
+    setTimeout(() => {
+        for (let i = 0; i < forms.length; i++) {
+            forms[i].classList.remove("success");
+            forms[i].classList.remove("error");
+        }
+    }, "2000");
+
 }
 
 Library.prototype.render = function () {
