@@ -54,8 +54,6 @@ editSubmit.addEventListener('click', function (e) {
     if (editTitle.value == '' || editAuthor.value == '' || editPages.value == '') {
         lib.addErrorClass('edit-book');
         return;
-    } else if (lib.hasBook(editTitle.value)) {
-        return;
     } else {
         let book = lib.findBookById(modalBody.getAttribute('id'));
         book.edit(editTitle.value, editAuthor.value, editPages.value, editRead.value);
@@ -70,6 +68,7 @@ orderSelect.addEventListener("click", function (e) {
         lib.sortLibraryByAuthor();
     } else {
         lib.sortLibraryByPages();
+        lib.render();
     }
 })
 
@@ -172,11 +171,9 @@ Library.prototype.sortLibraryByTitle = function () {
 }
 Library.prototype.sortLibraryByAuthor = function () {
     this.libArr.sort(compareAuthor);
-    this.render();
 }
 Library.prototype.sortLibraryByPages = function () {
     this.libArr.sort(comparePages);
-    this.render();
 
 }
 function compareTitles(a, b) {
