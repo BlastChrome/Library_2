@@ -78,8 +78,8 @@ orderSelect.addEventListener("click", function (e) {
         lib.sortLibraryByAuthor();
     } else {
         lib.sortLibraryByPages();
-        lib.render();
     }
+    lib.render();
 })
 
 
@@ -204,6 +204,7 @@ function compareTitles(a, b) {
     return (a.title < b.title) ? -1 : (a.title > b.title) ? 1 : 0;
 }
 function compareAuthor(a, b) {
+    console.log("here");
     return (a.author < b.author) ? -1 : (a.author > b.author) ? 1 : 0;
 }
 function comparePages(a, b) {
