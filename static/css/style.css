@@ -29,6 +29,9 @@
 }
 
 
+.hide {
+  display: none;
+}
 
 .fade-in {
   opacity: 0;

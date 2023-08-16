@@ -7,6 +7,7 @@ function Book(title, author, pages, hasRead) {
     this.pages = pages;
     this.hasRead = hasRead;
     this.id = this.createID();
+    this.element = this.getBookEl();
 }
 function Library() {
     this.libArr = [];
@@ -33,6 +34,7 @@ const modalBody = document.querySelector(".modal-body");
 
 const orderSelect = document.getElementById("order-select");
 
+const searchForm = document.getElementById("searchbar");
 //event listeners 
 submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
@@ -61,6 +63,14 @@ editSubmit.addEventListener('click', function (e) {
     }
     lib.addErrorClass('edit-book');
 })
+searchForm.addEventListener('input', function (e) {
+    let input = e.target.value;
+    lib.libArr.forEach(book => {
+        const isVisible = book.title.includes(input) || book.pages.toString().includes(input) || book.author.includes(input);
+        book.element.classList.toggle("hide", !isVisible);
+    })
+})
+
 orderSelect.addEventListener("click", function (e) {
     if (e.target.id == 'order-title') {
         lib.sortLibraryByTitle();
@@ -90,7 +100,14 @@ Book.prototype.createBookElement = function () {
          <button class='btn btn-danger'onclick="deleteBook(${this.id})">Delete</button>
     </td>
     `
+    this.setBookEl(bookEl);
     return bookEl;
+}
+Book.prototype.setBookEl = function (el) {
+    this.element = el;
+}
+Book.prototype.getBookEl = function () {
+    return this.element;
 }
 
 Book.prototype.createID = function () {
@@ -161,7 +178,6 @@ Library.prototype.addErrorClass = function (form) {
     }, "2000");
 
 }
-
 Library.prototype.render = function () {
     //clear the current library element 
     while (this.libDisplay.firstChild) this.libDisplay.removeChild(this.libDisplay.lastChild);
