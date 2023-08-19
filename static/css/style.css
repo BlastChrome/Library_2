@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+main {
+  min-height: 600px;
+}
+
 #title.error,
 #author.error,
 #pages.error,
@@ -34,9 +38,6 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   height: 100vh;
 }
 
