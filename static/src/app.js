@@ -31,6 +31,10 @@ const modalBody = document.querySelector(".modal-body");
 
 const orderSelect = document.getElementById("order-select");
 const searchForm = document.getElementById("searchbar");
+const clearBtn = document.getElementById("clear-btn");
+
+
+
 //event listeners 
 submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
@@ -77,6 +81,13 @@ orderSelect.addEventListener("click", function (e) {
     }
     lib.render();
 })
+clearBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    localStorage.clear();
+    lib.libArr = [];
+    lib.render();
+})
+
 // Class Method
 Book.prototype.updateBook = function () { }
 
@@ -173,7 +184,8 @@ Library.prototype.addErrorClass = function (form) {
 Library.prototype.render = function () {
     //clear the current library elements
     while (this.libDisplay.firstChild) this.libDisplay.removeChild(this.libDisplay.lastChild);
-    //loop through library array and create book html for each book
+    //loop through library array and create book html for each book 
+
     for (let i = 0; i < this.libArr.length; i++) {
         this.addBookToDisplay(this.libArr[i]);
     }
@@ -196,7 +208,6 @@ function compareTitles(a, b) {
     return (a.title < b.title) ? -1 : (a.title > b.title) ? 1 : 0;
 }
 function compareAuthor(a, b) {
-    console.log("here");
     return (a.author < b.author) ? -1 : (a.author > b.author) ? 1 : 0;
 }
 function comparePages(a, b) {
@@ -222,10 +233,7 @@ if (localStorage !== null) {
 }
 lib.render();
 
-printLocalStorage();
 //public functions
-
-
 function initEditForm(id) {
     modalTitle.innerHTML = 'Edit Book: ';
     let book = lib.findBookById(id);
