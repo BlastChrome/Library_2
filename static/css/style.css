@@ -6,6 +6,7 @@
 
 main {
   min-height: 600px;
+
 }
 
 #title.error,
@@ -39,6 +40,10 @@ main {
 
 body {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
 }
 
 footer {
@@ -92,6 +97,11 @@ footer img {}
 }
 
 @media (max-width: 767px) {
+
+  .form-inline .form-control {
+    width: 100%;
+  }
+
   .button-box {
     display: flex;
     flex-direction: column;

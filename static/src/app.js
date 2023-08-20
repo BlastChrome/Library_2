@@ -8,6 +8,7 @@ function Book(title, author, pages, hasRead, id) {
     this.hasRead = hasRead;
     id == null ? this.id = this.createID() : this.id = id;
 }
+
 function Library() {
     this.libArr = [];
     this.libDisplay = document.getElementById("library-display");
@@ -33,8 +34,6 @@ const orderSelect = document.getElementById("order-select");
 const searchForm = document.getElementById("searchbar");
 const clearBtn = document.getElementById("clear-btn");
 
-
-
 //event listeners 
 submitBtn.addEventListener('click', function (e) {
     //logic for adding book to library  
@@ -52,6 +51,7 @@ submitBtn.addEventListener('click', function (e) {
     }
     lib.addErrorClass('new-book');
 })
+
 editSubmit.addEventListener('click', function (e) {
     e.preventDefault();
     if (editTitle.value == '' || editAuthor.value == '' || editPages.value == '') {
@@ -64,6 +64,7 @@ editSubmit.addEventListener('click', function (e) {
     }
     lib.addErrorClass('edit-book');
 })
+
 searchForm.addEventListener('input', function (e) {
     let input = e.target.value;
     lib.libArr.forEach(book => {
@@ -71,6 +72,7 @@ searchForm.addEventListener('input', function (e) {
         book.element.classList.toggle("hide", !isVisible);
     })
 })
+
 orderSelect.addEventListener("click", function (e) {
     if (e.target.id == 'order-title') {
         lib.sortLibraryByTitle();
@@ -81,6 +83,7 @@ orderSelect.addEventListener("click", function (e) {
     }
     lib.render();
 })
+
 clearBtn.addEventListener("click", function (e) {
     e.preventDefault();
     localStorage.clear();
@@ -88,9 +91,7 @@ clearBtn.addEventListener("click", function (e) {
     lib.render();
 })
 
-// Class Method
-Book.prototype.updateBook = function () { }
-
+// Class Method(s)
 Book.prototype.createBookElement = function () {
     let bookEl = document.createElement('tr');
     bookEl.setAttribute('id', this.id);
@@ -108,9 +109,11 @@ Book.prototype.createBookElement = function () {
     this.setBookEl(bookEl);
     return bookEl;
 }
+
 Book.prototype.setBookEl = function (el) {
     this.element = el;
 }
+
 Book.prototype.getBookEl = function () {
     return this.element;
 }
@@ -147,15 +150,18 @@ Library.prototype.hasBook = function (title) {
     }
     return false;
 }
+
 Library.prototype.getInfo = function () {
     return this;
 }
+
 Library.prototype.addBookToDisplay = function (book) {
     //creates the book html
     let el = book.createBookElement()
     //adds the el as a child node to the lib display
     this.libDisplay.appendChild(el);
 }
+
 Library.prototype.addErrorClass = function (form) {
     let forms = [];
     if (form == 'new-book') {
@@ -181,6 +187,7 @@ Library.prototype.addErrorClass = function (form) {
     }, "2000");
 
 }
+
 Library.prototype.render = function () {
     //clear the current library elements
     while (this.libDisplay.firstChild) this.libDisplay.removeChild(this.libDisplay.lastChild);
@@ -190,43 +197,38 @@ Library.prototype.render = function () {
         this.addBookToDisplay(this.libArr[i]);
     }
 }
+
 Library.prototype.findBookById = function (id) {
     return this.libArr.find(book => book.id == id);
 }
+
 Library.prototype.sortLibraryByTitle = function () {
     this.libArr.sort(compareTitles);
     this.render();
 }
+
 Library.prototype.sortLibraryByAuthor = function () {
     this.libArr.sort(compareAuthor);
 }
+
 Library.prototype.sortLibraryByPages = function () {
     this.libArr.sort(comparePages);
 
 }
+
 function compareTitles(a, b) {
     return (a.title < b.title) ? -1 : (a.title > b.title) ? 1 : 0;
 }
+
 function compareAuthor(a, b) {
     return (a.author < b.author) ? -1 : (a.author > b.author) ? 1 : 0;
 }
+
 function comparePages(a, b) {
     return (a.pages < b.pages) ? -1 : (a.pages > b.pages) ? 1 : 0;
 }
 // Instantition of Library
 let lib = new Library();
-
-//test values 
-// let book1 = new Book("Hunter x Hunter", "Yoshihiro Togashi", 400, true);
-// let book2 = new Book("Jujustu Kaisen", "Gege Akutami", 200, true);
-// let book3 = new Book("One Piece", "Eiichiro Oda", 1000, true);
-// let book4 = new Book("Berserk", "Kentaro Miura", 500, true);
-// lib.addBookToArr(book1);
-// lib.addBookToArr(book2);
-// lib.addBookToArr(book3);
-// lib.addBookToArr(book4);
-
-//if books exist in localstorage add them to the library 
 
 if (localStorage !== null) {
     addToLibraryFromStorage()
@@ -245,18 +247,13 @@ function initEditForm(id) {
     //gives the modal body the same id as the book
     modalBody.setAttribute('id', book.id);
 }
+
 function deleteBook(id) {
     for (let i = 0; i < lib.libArr.length; i++) {
         if (lib.libArr[i].id == id) {
             lib.libArr.splice(i, 1);
             lib.render();
         }
-    }
-}
-
-function printLocalStorage() {
-    for (let i = 0; i < localStorage.length; i++) {
-        console.log(localStorage.getItem(localStorage.key(i)) + "\n\n");
     }
 }
 
@@ -276,10 +273,6 @@ function addToLibraryFromStorage() {
         lib.addBookToArr(book);
         addBookToStorage(book);
     }
-}
-
-function getBooksFromStorage() {
-    return JSON.parse(localStorage.getItem("library"));
 }
 
 function storageHasBook(book) {
