@@ -251,9 +251,8 @@ function initEditForm(id) {
 
 function deleteBook(id) {
     let book = lib.findBookById(id);
-    let filteredArr = lib.libArr.filter((element => element.title != book.title))
+    lib.libArr = lib.libArr.filter((element => element.title != book.title))
     deleteBookFromStorage(book);
-    lib.libArr = filteredArr;
     lib.render();
 }
 
