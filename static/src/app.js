@@ -89,6 +89,7 @@ clearBtn.addEventListener("click", function (e) {
     localStorage.clear();
     lib.libArr = [];
     lib.render();
+
 })
 
 // Class Method(s)
@@ -249,12 +250,11 @@ function initEditForm(id) {
 }
 
 function deleteBook(id) {
-    for (let i = 0; i < lib.libArr.length; i++) {
-        if (lib.libArr[i].id == id) {
-            lib.libArr.splice(i, 1);
-            lib.render();
-        }
-    }
+    let book = lib.findBookById(id);
+    let filteredArr = lib.libArr.filter((element => element.title != book.title))
+    deleteBookFromStorage(book);
+    lib.libArr = filteredArr;
+    lib.render();
 }
 
 function addBookToStorage(book) {
@@ -262,6 +262,12 @@ function addBookToStorage(book) {
     if (existingBooks == null) existingBooks = [];
     if (existingBooks.find((search) => search.title == book.title)) return;
     existingBooks.push(book);
+    localStorage.setItem("library", JSON.stringify(existingBooks));
+}
+
+function deleteBookFromStorage(book) {
+    let existingBooks = JSON.parse(localStorage.getItem("library"));
+    existingBooks = existingBooks.filter((element => element.title != book.title));
     localStorage.setItem("library", JSON.stringify(existingBooks));
 }
 
